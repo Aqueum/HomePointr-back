@@ -78,10 +78,10 @@ End of digitalocean setup tutorial, the following was originally based on [djang
 ## Create app
 - ctrl-c to exit server
 - `cd /vagrant/homepointr` to get to folder with manage.py
-- `python manage.py startapp polls` to create polls app starter
+- `python manage.py startapp homes` to create homes app starter
 
 ## Add a view
-- edit `polls/views.py` to: 
+- edit `homes/views.py` to: 
 ```
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
@@ -93,7 +93,7 @@ from .models import Choice, Question
 
 
 class IndexView(generic.ListView):
-    template_name = 'polls/index.html'
+    template_name = 'homes/index.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
@@ -108,7 +108,7 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     model = Question
-    template_name = 'polls/detail.html'
+    template_name = 'homes/detail.html'
 
     def get_queryset(self):
         """
@@ -119,7 +119,7 @@ class DetailView(generic.DetailView):
 
 class ResultsView(generic.DetailView):
     model = Question
-    template_name = 'polls/results.html'
+    template_name = 'homes/results.html'
 
 
 def vote(request, question_id):
@@ -128,7 +128,7 @@ def vote(request, question_id):
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the question voting form.
-        return render(request, 'polls/detail.html', {
+        return render(request, 'homes/detail.html', {
             'question': question,
             'error_message': "You didn't select a choice.",
         })
@@ -138,16 +138,16 @@ def vote(request, question_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        return HttpResponseRedirect(reverse('homes:results', args=(question.id,)))
 
 ```
-- Add new `polls/urls.py` with content:
+- Add new `homes/urls.py` with content:
 ```
 from django.conf.urls import url
 
 from . import views
 
-app_name = 'polls'
+app_name = 'homes'
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
@@ -162,13 +162,13 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^polls/', include('polls.urls')),
+    url(r'^homes/', include('homes.urls')),
     url(r'^admin/', admin.site.urls),
 ]
 ```
 
 ## Create models
-- Edit `polls/models.py` to:
+- Edit `homes/models.py` to:
 ```
 import datetime
 from django.db import models
@@ -200,10 +200,19 @@ class Choice(models.Model):
 
 ```
 ## Activate models
-- add `'polls.apps.PollsConfig',` to top of `INSTALLED_APPS`. list in `homepointr/homepointr/settings.py`
+- add `'homes.apps.HomesConfig',` to top of `INSTALLED_APPS`. list in `homepointr/homepointr/settings.py`
+- ? check at the end to see if homepointr/homes/apps.py includes:
+    ```
+    from django.apps import AppConfig
+
+
+    class HomesConfig(AppConfig):
+        name = 'homes'
+
+    ```
 
 ## Admin
-- edit `polls/admin.py` to:
+- edit `homes/admin.py` to:
 ```
 from django.contrib import admin
 
@@ -231,36 +240,36 @@ admin.site.register(Question, QuestionAdmin)
 ```
 
 ## Add templates
-- create file `/polls/templates/polls/index.html` with content:
+- create file `/homes/templates/homes/index.html` with content:
 ```
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" /> {% if latest_question_list %}
+<link rel="stylesheet" type="text/css" href="{% static 'homes/style.css' %}" /> {% if latest_question_list %}
 
 <ul>
     {% for question in latest_question_list %}
-    <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+    <li><a href="{% url 'homes:detail' question.id %}">{{ question.question_text }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
-<p>No polls are available.</p>
+<p>No homes are available.</p>
 {% endif %}
 ```
-- create file `/polls/templates/polls/detail.html` with content:
+- create file `/homes/templates/homes/detail.html` with content:
 ```
 <h1>{{ question.question_text }}</h1>
 
 {% if error_message %}
 <p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'polls:vote' question.id %}" method="post">
+<form action="{% url 'homes:vote' question.id %}" method="post">
     {% csrf_token %} {% for choice in question.choice_set.all %}
     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
     <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br /> {% endfor %}
     <input type="submit" value="Vote" />
 </form>
 ```
-- create file `/polls/templates/polls/results.html` with content:
+- create file `/homes/templates/homes/results.html` with content:
 ```
 <h1>{{ question.question_text }}</h1>
 
@@ -270,11 +279,11 @@ admin.site.register(Question, QuestionAdmin)
     {% endfor %}
 </ul>
 
-<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+<a href="{% url 'homes:detail' question.id %}">Vote again?</a>
 ```
 
 ## Look and feel
-- add file `polls/static/polls/style.css` with content:
+- add file `homes/static/homes/style.css` with content:
 ```
 li a {
   color: green;
@@ -284,18 +293,18 @@ body {
   background: white url("images/python.gif") no-repeat right bottom;
 }
 ```
-- add file `polls/static/polls/images/python.gif`
-- add `admin.site.site_header = 'Polls admin'` to `polls/admin.py`
+- add file `homes/static/homes/images/python.gif`
+- add `admin.site.site_header = 'HomePointr admin'` to `homes/admin.py`
 
 
 ## Migrate the Database
 - `python manage.py makemigrations`
-- `python manage.py makemigrations polls` to create migrations for model changes
-- optional `python manage.py sqlmigrate polls 0001` to see what SQL Django thinks is needed
+- `python manage.py makemigrations homes` to create migrations for model changes
+- optional `python manage.py sqlmigrate homes 0001` to see what SQL Django thinks is needed
 - optional `python manage.py check` to check for project problems
 - `python manage.py migrate` to create model tables in database
 
 ## Test App
 - `python manage.py runserver 0.0.0.0:8000`
-- [localhost:8000/polls](http://localhost:8000/polls)
+- [localhost:8000/homes](http://localhost:8000/homes)
 - [localhost:8000/admin](http://localhost:8000/admin)
