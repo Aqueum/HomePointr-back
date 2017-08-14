@@ -3,10 +3,10 @@ A Django back end app with PostgreSQL hosted on Ubuntu 16.04
 
 # Method
 ## Setup Ubuntu 16.04
-- Either follow [this guide](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04) to do it properly on a remove server OR
+- Either follow [this guide](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04) to set up on remove server OR
 - Pick box from [Vagrant](https://app.vagrantup.com/boxes/)
 - I chose [ubuntu/xenial64](https://app.vagrantup.com/ubuntu/boxes/xenial64)
-  - Create & navigate to new folder in terminal (I'm calling mine `DjP` cloning it from an empty GitHub & copying in the .gitignore from my [DjangoPostgres](https://github.com/Aqueum/DjangoPostgres/blob/master/.gitignore))
+  - Create & navigate to new folder in terminal (I'm calling mine `HomePointr-back` cloning it from an empty GitHub & copying in the .gitignore from my [DjP](https://github.com/Aqueum/DjP/blob/master/.gitignore))
   - `vagrant init ubuntu/xenial64`
   - edit vagrant file
     - change `# config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"`
@@ -16,7 +16,7 @@ A Django back end app with PostgreSQL hosted on Ubuntu 16.04
   - `vagrant ssh` to SSH into your new box
   - `cd /vagrant` to get into the shared diectory
 
-the following is from [how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04):
+the following was originally based on[how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04):
 ## Install the Components from the Ubuntu Repositories 
 - `sudo apt-get update`
 - `sudo apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib`
@@ -73,7 +73,7 @@ still not completely sure if this should be `'UTC'` or `'Europe/London'`
 - [localhost:8000](http://localhost:8000/)
 - [localhost:8000/admin](http://localhost:8000/admin)
 
-End of digitalocean setup tutorial, the following is based on [django polls tutorial](https://docs.djangoproject.com/en/1.11/intro/tutorial01/)
+End of digitalocean setup tutorial, the following was originally based on [django polls tutorial](https://docs.djangoproject.com/en/1.11/intro/tutorial01/)
 
 ## Create app
 - ctrl-c to exit server
