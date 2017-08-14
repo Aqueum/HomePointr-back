@@ -25,36 +25,36 @@ the following is from [how-to-use-postgresql-with-your-django-application-on-ubu
 - `sudo -u postgres psql` to log in to PostgreSQL as postgres
 - enter:
 ```
-CREATE DATABASE myproject;
-CREATE USER myprojectuser WITH PASSWORD 'password';
-ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
-ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
-ALTER ROLE myprojectuser SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;
+CREATE DATABASE homepointr;
+CREATE USER Aqueum WITH PASSWORD '1P';
+ALTER ROLE Aqueum SET client_encoding TO 'utf8';
+ALTER ROLE Aqueum SET default_transaction_isolation TO 'read committed';
+ALTER ROLE Aqueum SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE homepointr TO Aqueum;
 ```
 - `\q` to exit PostgreSQL
 
 ## Install Django within a Virtual Environment
 - `sudo -H pip3 install --upgrade pip`(because it always complains)
 - `sudo -H pip3 install virtualenv` (added the -H at the prompts suggestion)
-- `mkdir /vagrant/myproject`
-- `cd /vagrant/myproject`
-- `virtualenv myprojectenv` to create virtual environment
-- `source myprojectenv/bin/activate`
+- `mkdir /vagrant/homepointr`
+- `cd /vagrant/homepointr`
+- `virtualenv ENV` to create virtual environment
+- `source ENV/bin/activate`
 - `pip install django psycopg2`
-- `django-admin.py startproject myproject .`
+- `django-admin.py startproject homepointr .`
 
 ## Configure the Django Database Settings
-- Edit `myproject/myproject/settings.py` to have: 
+- Edit `homepointr/homepointr/settings.py` to have: 
   - `ALLOWED_HOSTS = ['.localhost', '35.176.170.23', '192.168.1.65', '109.157.214.104', '127.0.0.1']` these are: local host, my lightsail ip, mu local host according to system, my public ip, standard localhost
   - `DATABASES` as:
     ```
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'myproject',
-            'USER': 'myprojectuser',
-            'PASSWORD': 'password',
+            'NAME': 'homepointr',
+            'USER': 'Aqueum',
+            'PASSWORD': '1P',
             'HOST': 'localhost',
             'PORT': '',
         }
@@ -65,10 +65,10 @@ GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;
 still not completely sure if this should be `'UTC'` or `'Europe/London'`
 
 ## Migrate the Database and Test Project
-- `cd /vagrant/myproject`
+- `cd /vagrant/homepointr`
 - `python manage.py makemigrations`
 - `python manage.py migrate`
-- `python manage.py createsuperuser` I used myprojectuser & password2
+- `python manage.py createsuperuser` I used Aqueum & 1P
 - `python manage.py runserver 0.0.0.0:8000`
 - [localhost:8000](http://localhost:8000/)
 - [localhost:8000/admin](http://localhost:8000/admin)
@@ -77,7 +77,7 @@ End of digitalocean setup tutorial, the following is based on [django polls tuto
 
 ## Create app
 - ctrl-c to exit server
-- `cd /vagrant/myproject` to get to folder with manage.py
+- `cd /vagrant/homepointr` to get to folder with manage.py
 - `python manage.py startapp polls` to create polls app starter
 
 ## Add a view
@@ -156,7 +156,7 @@ urlpatterns = [
     url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
 ]
 ```
-- Edit `myproject/urls.py` so we have:
+- Edit `homepointr/urls.py` so we have:
 ```
 from django.conf.urls import include, url
 from django.contrib import admin
@@ -200,7 +200,7 @@ class Choice(models.Model):
 
 ```
 ## Activate models
-- add `'polls.apps.PollsConfig',` to top of `INSTALLED_APPS`. list in `myproject/myproject/settings.py`
+- add `'polls.apps.PollsConfig',` to top of `INSTALLED_APPS`. list in `homepointr/homepointr/settings.py`
 
 ## Admin
 - edit `polls/admin.py` to:
