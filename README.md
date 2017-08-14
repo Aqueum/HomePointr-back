@@ -24,18 +24,18 @@ the following was originally based on[how-to-use-postgresql-with-your-django-app
 ## Create a Database and Database User
 - `sudo -u postgres psql` to log in to PostgreSQL as postgres
 - enter:
-```
-CREATE DATABASE homepointr;
-CREATE USER Aqueum WITH PASSWORD '1P';
-ALTER ROLE Aqueum SET client_encoding TO 'utf8';
-ALTER ROLE Aqueum SET default_transaction_isolation TO 'read committed';
-ALTER ROLE Aqueum SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE homepointr TO Aqueum;
-```
+    ```
+    CREATE DATABASE homepointr;
+    CREATE USER Aqueum WITH PASSWORD '1P';
+    ALTER ROLE Aqueum SET client_encoding TO 'utf8';
+    ALTER ROLE Aqueum SET default_transaction_isolation TO 'read committed';
+    ALTER ROLE Aqueum SET timezone TO 'UTC';
+    GRANT ALL PRIVILEGES ON DATABASE homepointr TO Aqueum;
+    ```
 - `\q` to exit PostgreSQL
 
 ## Install Django within a Virtual Environment
-- `sudo -H pip3 install --upgrade pip`(because it always complains)
+- `sudo -H pip3 install --upgrade pip` (because it always complains)
 - `sudo -H pip3 install virtualenv` (added the -H at the prompts suggestion)
 - `mkdir /vagrant/homepointr`
 - `cd /vagrant/homepointr`
@@ -62,7 +62,7 @@ GRANT ALL PRIVILEGES ON DATABASE homepointr TO Aqueum;
     ```
   - `LANGUAGE_CODE = 'en-gb'`
   - `TIME_ZONE = 'UTC'`
-still not completely sure if this should be `'UTC'` or `'Europe/London'`
+    - ? still not completely sure if this should be `'UTC'` or `'Europe/London'`
 
 ## Migrate the Database and Test Project
 - `cd /vagrant/homepointr`
@@ -79,6 +79,50 @@ End of digitalocean setup tutorial, the following was originally based on [djang
 - ctrl-c to exit server
 - `cd /vagrant/homepointr` to get to folder with manage.py
 - `python manage.py startapp homes` to create homes app starter
+
+## Create models
+- Edit `homes/models.py` to:
+```
+import datetime
+from django.db import models
+from django.utils import timezone
+
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+
+    def __str__(self):
+        return self.question_text
+
+    def was_published_recently(self):
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+    was_published_recently.admin_order_field = 'pub_date'
+    was_published_recently.boolean = True
+    was_published_recently.short_description = 'Published recently?'
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.choice_text
+
+```
+## Activate models
+- add `'homes.apps.HomesConfig',` to top of `INSTALLED_APPS`. list in `homepointr/homepointr/settings.py`
+- ? check at the end to see if homepointr/homes/apps.py includes:
+    ```
+    from django.apps import AppConfig
+
+
+    class HomesConfig(AppConfig):
+        name = 'homes'
+
+    ```
 
 ## Add a view
 - edit `homes/views.py` to: 
@@ -166,50 +210,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
 ```
-
-## Create models
-- Edit `homes/models.py` to:
-```
-import datetime
-from django.db import models
-from django.utils import timezone
-
-
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-
-    def __str__(self):
-        return self.question_text
-
-    def was_published_recently(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
-    was_published_recently.admin_order_field = 'pub_date'
-    was_published_recently.boolean = True
-    was_published_recently.short_description = 'Published recently?'
-
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.choice_text
-
-```
-## Activate models
-- add `'homes.apps.HomesConfig',` to top of `INSTALLED_APPS`. list in `homepointr/homepointr/settings.py`
-- ? check at the end to see if homepointr/homes/apps.py includes:
-    ```
-    from django.apps import AppConfig
-
-
-    class HomesConfig(AppConfig):
-        name = 'homes'
-
-    ```
 
 ## Admin
 - edit `homes/admin.py` to:
