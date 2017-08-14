@@ -16,7 +16,7 @@ A Django back end app with PostgreSQL hosted on Ubuntu 16.04
   - `vagrant ssh` to SSH into your new box
   - `cd /vagrant` to get into the shared diectory
 
-the following was originally based on[how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04):
+the following was originally based on [how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04):
 ## Install the Components from the Ubuntu Repositories 
 - `sudo apt-get update`
 - `sudo apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib`
@@ -94,13 +94,6 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question_text
-
-    def was_published_recently(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
-    was_published_recently.admin_order_field = 'pub_date'
-    was_published_recently.boolean = True
-    was_published_recently.short_description = 'Published recently?'
 
 
 class Choice(models.Model):
@@ -231,7 +224,7 @@ class QuestionAdmin(admin.ModelAdmin):
         ('Date information', {'fields': ['pub_date']}),
     ]
     inlines = [ChoiceInline]
-    list_display = ('question_text', 'pub_date', 'was_published_recently')
+    list_display = ('question_text', 'pub_date')
     list_filter = ['pub_date']
     search_fields = ['question_text']
 
