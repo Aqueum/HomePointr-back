@@ -83,9 +83,7 @@ End of digitalocean setup tutorial, the following was originally based on [djang
 ## Create models
 - Edit `homes/models.py` to:
 ```
-import datetime
 from django.db import models
-from django.utils import timezone
 
 
 class Question(models.Model):
