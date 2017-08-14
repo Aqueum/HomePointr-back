@@ -1,0 +1,9 @@
+# Admin files
+.vagrant/
+.idea/
+*console.log
+.DS_Store
+myprojectenv/
+
+# Python bite code
+*.pyc
