@@ -181,9 +181,6 @@ class PropertyInline(admin.TabularInline):
 
 
 class ProviderAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None,               {'fields': ['provider_name']}),
-    ]
     inlines = [PropertyInline]
     list_display = ('property_name')
     search_fields = ['property_name']
