@@ -6,7 +6,7 @@ A Django back end app with PostgreSQL hosted on Ubuntu 16.04
 - Either follow [this guide](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04) to set up on remove server OR
 - Pick box from [Vagrant](https://app.vagrantup.com/boxes/)
 - I chose [ubuntu/xenial64](https://app.vagrantup.com/ubuntu/boxes/xenial64)
-  - Create & navigate to new folder in terminal (I'm calling mine `HomePointr-back` cloning it from an empty GitHub & copying in the .gitignore from my [DjP](https://github.com/Aqueum/DjP/blob/master/.gitignore))
+  - Create & navigate to new folder in terminal (I'm calling mine `HomePointr-back` cloning it from an empty GitHub & copying in the .gitignore from my [DjP](https://github.com/myprojectuser/DjP/blob/master/.gitignore))
   - `vagrant init ubuntu/xenial64`
   - edit vagrant file
     - change `# config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"`
@@ -26,11 +26,11 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
 - enter:
     ```
     CREATE DATABASE homepointr;
-    CREATE USER Aqueum WITH PASSWORD 'jEQuV6h2uwBMG237';
-    ALTER ROLE Aqueum SET client_encoding TO 'utf8';
-    ALTER ROLE Aqueum SET default_transaction_isolation TO 'read committed';
-    ALTER ROLE Aqueum SET timezone TO 'UTC';
-    GRANT ALL PRIVILEGES ON DATABASE homepointr TO Aqueum;
+    CREATE USER myprojectuser WITH PASSWORD 'password';
+    ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
+    ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
+    ALTER ROLE myprojectuser SET timezone TO 'UTC';
+    GRANT ALL PRIVILEGES ON DATABASE homepointr TO myprojectuser;
     ```
 - `\q` to exit PostgreSQL
 
@@ -53,8 +53,8 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'homepointr',
-            'USER': 'Aqueum',
-            'PASSWORD': 'jEQuV6h2uwBMG237',
+            'USER': 'myprojectuser',
+            'PASSWORD': 'password',
             'HOST': 'localhost',
             'PORT': '',
         }
@@ -68,7 +68,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
 - `cd /vagrant/homepointr`
 - `python manage.py makemigrations`
 - `python manage.py migrate`
-- `python manage.py createsuperuser` I used Aqueum & jEQuV6h2uwBMG237
+- `python manage.py createsuperuser` I used myprojectuser & password
 - `python manage.py runserver 0.0.0.0:8000`
 - [localhost:8000](http://localhost:8000/)
 - [localhost:8000/admin](http://localhost:8000/admin)

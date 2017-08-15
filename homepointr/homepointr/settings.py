@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'homepointr',
-        'USER': 'Aqueum',
-        'PASSWORD': 'jEQuV6h2uwBMG237',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
     }
