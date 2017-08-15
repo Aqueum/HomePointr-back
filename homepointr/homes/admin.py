@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Bread
+
+
+class BreadAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Bread, BreadAdmin)
