@@ -20,9 +20,10 @@ class PropertyInline(admin.TabularInline):
 
 
 class ProviderAdmin(admin.ModelAdmin):
-    inlines = [PropertyInline]
-    list_display = ('property_name')
-    search_fields = ['property_name']
+    pass
+    # inlines = [PropertyInline]
+    # list_display = ('property_name')
+    # search_fields = ['property_name']
 
 
 admin.site.register(Provider, ProviderAdmin)
