@@ -124,8 +124,8 @@ class Property(models.Model):
     town = models.CharField(max_length=31)
     region = models.CharField(max_length=31)
     postcode = models.CharField(max_length=31)
-    lat = models.DecimalField(decimal_places=6)
-    lng = models.DecimalField(decimal_places=6)
+    lat = models.DecimalField(max_digits=8, decimal_places=6)
+    lng = models.DecimalField(max_digits=9, decimal_places=6)
     council = models.ForeignKey(Council)
     bedrooms = models.IntegerField(default=1)
     beds = models.IntegerField(default=1)
@@ -134,8 +134,8 @@ class Property(models.Model):
     wheelchair_accessible = models.BooleanField
     parking = models.BooleanField
     shared = models.BooleanField
-    rent_pcm = models.DecimalField(decimal_places=2)
-    deposit = models.DecimalField(decimal_places=2)
+    rent_pcm = models.DecimalField(max_digits=7, decimal_places=2)
+    deposit = models.DecimalField(max_digits=7, decimal_places=2)
     units = models.IntegerField(default=1)
     next_available = models.DateField
 
