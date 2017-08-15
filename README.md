@@ -26,7 +26,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
 - enter:
     ```
     CREATE DATABASE homepointr;
-    CREATE USER myprojectuser WITH PASSWORD 'password';
+    CREATE USER myprojectuser WITH PASSWORD 'jEQuV6h2uwBMG237';
     ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
     ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
     ALTER ROLE myprojectuser SET timezone TO 'UTC';
@@ -54,7 +54,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'homepointr',
             'USER': 'myprojectuser',
-            'PASSWORD': 'password',
+            'PASSWORD': 'jEQuV6h2uwBMG237',
             'HOST': 'localhost',
             'PORT': '',
         }
@@ -68,7 +68,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
 - `cd /vagrant/homepointr`
 - `python manage.py makemigrations`
 - `python manage.py migrate`
-- `python manage.py createsuperuser` I used myprojectuser & password
+- `python manage.py createsuperuser` I used myprojectuser & jEQuV6h2uwBMG237
 - `python manage.py runserver 0:8000`
 - [localhost:8000](http://localhost:8000/)
 - [localhost:8000/admin](http://localhost:8000/admin)
@@ -86,71 +86,11 @@ End of digitalocean setup tutorial, the following was originally based on [djang
 from django.db import models
 
 
-class Provider(models.Model):
+class Bread(models.Model):
     name = models.CharField(max_length=127)
 
     def __str__(self):
         return self.name
-
-
-class PropertyType(models.Model):
-    ptype = models.CharField(max_length=31)
-
-    def __str__(self):
-        return self.ptype
-
-
-class Council(models.Model):
-    name = models.CharField(max_length=127)
-
-    def __str__(self):
-        return self.name
-
-
-class Support(models.Model):
-    support = models.CharField(max_length=31)
-
-    def __str__(self):
-        return self.support
-
-
-class Property(models.Model):
-    provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
-    ptype = models.ForeignKey(PropertyType)
-    name = models.CharField(max_length=255)
-    address1 = models.CharField(max_length=255, default=name)
-    address2 = models.CharField(max_length=255)
-    address3 = models.CharField(max_length=255)
-    town = models.CharField(max_length=31)
-    region = models.CharField(max_length=31)
-    postcode = models.CharField(max_length=31)
-    lat = models.DecimalField(max_digits=8, decimal_places=6)
-    lng = models.DecimalField(max_digits=9, decimal_places=6)
-    council = models.ForeignKey(Council)
-    bedrooms = models.IntegerField(default=1)
-    beds = models.IntegerField(default=1)
-    max_occupants = models.IntegerField(default=1)
-    support = models.ManyToManyField(Support)
-    wheelchair_accessible = models.BooleanField
-    parking = models.BooleanField
-    shared = models.BooleanField
-    rent_pcm = models.DecimalField(max_digits=7, decimal_places=2)
-    deposit = models.DecimalField(max_digits=7, decimal_places=2)
-    units = models.IntegerField(default=1)
-    next_available = models.DateField
-
-    def __str__(self):
-        return self.name
-
-
-class Photo(models.Model):
-    prop = models.ForeignKey(Property, on_delete=models.CASCADE)
-    url = models.CharField(max_length=200)
-    credit = models.CharField(max_length=200)
-    description = models.CharField(max_length=800)
-
-    def __str__(self):
-        return self.description
 
 ```
 ## Activate models
@@ -161,124 +101,17 @@ class Photo(models.Model):
 ```
 from django.contrib import admin
 
-from .models import Provider
-from .models import PropertyType
-from .models import Council
-from .models import Support
-from .models import Property
-from .models import Photo
+from .models import Bread
 
 
-class PhotoInline(admin.TabularInline):
-    model = Photo
-    extra = 0
+class BreadAdmin(admin.ModelAdmin):
+    pass
 
 
-class PropertyInline(admin.TabularInline):
-    model = Property
-    extra = 0
-    inlines = [PhotoInline]
-
-
-class ProviderAdmin(admin.ModelAdmin):
-    inlines = [PropertyInline]
-    list_display = ('property_name')
-    search_fields = ['property_name']
-
-
-admin.site.register(Provider, ProviderAdmin)
-```
-
-## Add a view
-- edit `homes/views.py` to: 
-```
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views import generic
-from django.utils import timezone
-
-from .models import Provider, Council, PropertyType, Support, Property, Photo
-
-
-class IndexView(generic.ListView):
-    template_name = 'homes/index.html'
-    context_object_name = 'property_list'
-
-    def get_queryset(self):
-        return Property.objects.order_by('property_name')
-
-
-class DetailView(generic.DetailView):
-    model = Property
-    template_name = 'homes/detail.html'
-
-    def get_queryset(self):
-        return Property.objects
-
-
-class ResultsView(generic.DetailView):
-    model = Property
-    template_name = 'homes/results.html'
-```
-- Add new `homes/urls.py` with content:
-```
-from django.conf.urls import url
-
-from . import views
-
-app_name = 'homes'
-urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
-    url(r'^(?P<pk>[0-9]+)/results/$',
-        views.ResultsView.as_view(), name='results'),
-    url(r'^(?P<Property_id>[0-9]+)/vote/$', views.vote, name='vote'),
-]
-```
-- Edit `homepointr/urls.py` so we have:
-```
-from django.conf.urls import include, url
-from django.contrib import admin
-
-urlpatterns = [
-    url(r'^homes/', include('homes.urls')),
-    url(r'^admin/', admin.site.urls),
-]
-```
-
-## Add templates
-- create file `/homes/templates/homes/index.html` with content:
-```
-{% load static %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'homes/style.css' %}" /> {% if property_list %}
-
-<ul>
-    {% for property in property_list %}
-    <li><a href="{% url 'homes:detail' property.id %}">{{ property.property_name }}</a></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No properties are available.</p>
-{% endif %}
-```
-- create file `/homes/templates/homes/detail.html` with content:
-```
-<h1>{{ property.property_name }}</h1>
-```
-- create file `/homes/templates/homes/results.html` with content:
-```
-<h1>{{ property.property_name }}</h1>
+admin.site.register(Bread, BreadAdmin)
 ```
 
 ## Look and feel
-- add file `homes/static/homes/style.css` with content:
-```
-li a {
-  color: red;
-}
-```
 - add `admin.site.site_header = 'HomePointr admin'` to `homes/admin.py`
 
 
