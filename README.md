@@ -156,6 +156,42 @@ class Photo(models.Model):
 ## Activate models
 - add `'homes.apps.HomesConfig',` to top of `INSTALLED_APPS`. list in `homepointr/homepointr/settings.py`
 
+## Admin
+- edit `homes/admin.py` to:
+```
+from django.contrib import admin
+
+from .models import Provider
+from .models import Council
+from .models import PropertyType
+from .models import Support
+from .models import Property
+from .models import Photo
+
+
+class PhotoInline(admin.TabularInline):
+    model = Photo
+    extra = 0
+
+
+class PropertyInline(admin.TabularInline):
+    model = Property
+    extra = 0
+    inlines = [PhotoInline]
+
+
+class ProviderAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None,               {'fields': ['provider_name']}),
+    ]
+    inlines = [PropertyInline]
+    list_display = ('property_name')
+    search_fields = ['property_name']
+
+
+admin.site.register(Provider, ProviderAdmin)
+```
+
 ## Add a view
 - edit `homes/views.py` to: 
 ```
@@ -212,42 +248,6 @@ urlpatterns = [
     url(r'^homes/', include('homes.urls')),
     url(r'^admin/', admin.site.urls),
 ]
-```
-
-## Admin
-- edit `homes/admin.py` to:
-```
-from django.contrib import admin
-
-from .models import Provider
-from .models import Council
-from .models import PropertyType
-from .models import Support
-from .models import Property
-from .models import Photo
-
-
-class PhotoInline(admin.TabularInline):
-    model = Photo
-    extra = 0
-
-
-class PropertyInline(admin.TabularInline):
-    model = Property
-    extra = 0
-    inlines = [PhotoInline]
-
-
-class ProviderAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None,               {'fields': ['provider_name']}),
-    ]
-    inlines = [PropertyInline]
-    list_display = ('property_name')
-    search_fields = ['property_name']
-
-
-admin.site.register(Provider, ProviderAdmin)
 ```
 
 ## Add templates
