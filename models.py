@@ -33,7 +33,7 @@ class Property(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     ptype = models.ForeignKey(PropetyType)
     name = models.CharField(max_length=255)
-    address1 = models.CharField(max_length=255)
+    address1 = models.CharField(max_length=255, default=name)
     address2 = models.CharField(max_length=255)
     address3 = models.CharField(max_length=255)
     town = models.CharField(max_length=31)
@@ -49,8 +49,8 @@ class Property(models.Model):
     wheelchair_accessible = models.BooleanField
     parking = models.BooleanField
     shared = models.BooleanField
-    rent_pcm = models.DecimalField(decimal_places=2, default=0.00)
-    deposit = models.DecimalField(decimal_places=2, default=0.00)
+    rent_pcm = models.DecimalField(decimal_places=2)
+    deposit = models.DecimalField(decimal_places=2)
     units = models.IntegerField(default=1)
     next_available = models.DateField
 
