@@ -90,28 +90,28 @@ class Provider(models.Model):
     name = models.CharField(max_length=127)
 
     def __str__(self):
-        return self.provider_name
+        return self.name
 
 
 class PropertyType(models.Model):
     ptype = models.CharField(max_length=31)
 
     def __str__(self):
-        return self.property_type
+        return self.ptype
 
 
 class Council(models.Model):
     name = models.CharField(max_length=127)
 
     def __str__(self):
-        return self.council_name
+        return self.name
 
 
 class Support(models.Model):
     support = models.CharField(max_length=31)
 
     def __str__(self):
-        return self.property_type
+        return self.support
 
 
 class Property(models.Model):
@@ -140,7 +140,7 @@ class Property(models.Model):
     next_available = models.DateField
 
     def __str__(self):
-        return self.property_name
+        return self.name
 
 
 class Photo(models.Model):
@@ -150,7 +150,7 @@ class Photo(models.Model):
     description = models.CharField(max_length=800)
 
     def __str__(self):
-        return self.photo_description
+        return self.description
 
 ```
 ## Activate models
