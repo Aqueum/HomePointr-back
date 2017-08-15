@@ -123,6 +123,6 @@ admin.site.register(Bread, BreadAdmin)
 - `python manage.py migrate` to create model tables in database
 
 ## Test App
-- `python manage.py runserver 0.0.0.0:8000`
+- `python manage.py runserver 0:8000`
 - [localhost:8000/homes](http://localhost:8000/homes)
 - [localhost:8000/admin](http://localhost:8000/admin)
