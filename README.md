@@ -124,57 +124,28 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
-from .models import Choice, Question
+from .models import Provider, Council, PropertyType, Support, Property, Photo
 
 
 class IndexView(generic.ListView):
     template_name = 'homes/index.html'
-    context_object_name = 'latest_question_list'
+    context_object_name = 'property_list'
 
     def get_queryset(self):
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
-        """
-        return Question.objects.filter(
-            pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
+        return Property.objects.order_by('property_name')
 
 
 class DetailView(generic.DetailView):
-    model = Question
+    model = Property
     template_name = 'homes/detail.html'
 
     def get_queryset(self):
-        """
-        Excludes any questions that aren't published yet.
-        """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        return Property.objects
 
 
 class ResultsView(generic.DetailView):
-    model = Question
+    model = Property
     template_name = 'homes/results.html'
-
-
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'homes/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('homes:results', args=(question.id,)))
-
 ```
 - Add new `homes/urls.py` with content:
 ```
@@ -188,7 +159,7 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
     url(r'^(?P<pk>[0-9]+)/results/$',
         views.ResultsView.as_view(), name='results'),
-    url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
+    url(r'^(?P<Property_id>[0-9]+)/vote/$', views.vote, name='vote'),
 ]
 ```
 - Edit `homepointr/urls.py` so we have:
@@ -207,27 +178,35 @@ urlpatterns = [
 ```
 from django.contrib import admin
 
-from .models import Question
-from .models import Choice
+from .models import Provider
+from .models import Council
+from .models import PropertyType
+from .models import Support
+from .models import Property
+from .models import Photo
 
 
-class ChoiceInline(admin.TabularInline):
-    model = Choice
+class PhotoInline(admin.TabularInline):
+    model = Photo
     extra = 0
 
 
-class QuestionAdmin(admin.ModelAdmin):
+class PropertyInline(admin.TabularInline):
+    model = Property
+    extra = 0
+    inlines = [PhotoInline]
+
+
+class ProviderAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['question_text']}),
-        ('Date information', {'fields': ['pub_date']}),
+        (None,               {'fields': ['provider_name']}),
     ]
-    inlines = [ChoiceInline]
-    list_display = ('question_text', 'pub_date')
-    list_filter = ['pub_date']
-    search_fields = ['question_text']
+    inlines = [PropertyInline]
+    list_display = ('property_name')
+    search_fields = ['property_name']
 
 
-admin.site.register(Question, QuestionAdmin)
+admin.site.register(Provider, ProviderAdmin)
 ```
 
 ## Add templates
@@ -235,56 +214,33 @@ admin.site.register(Question, QuestionAdmin)
 ```
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'homes/style.css' %}" /> {% if latest_question_list %}
+<link rel="stylesheet" type="text/css" href="{% static 'homes/style.css' %}" /> {% if property_list %}
 
 <ul>
-    {% for question in latest_question_list %}
-    <li><a href="{% url 'homes:detail' question.id %}">{{ question.question_text }}</a></li>
+    {% for property in property_list %}
+    <li><a href="{% url 'homes:detail' property.id %}">{{ property.property_name }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
-<p>No homes are available.</p>
+<p>No properties are available.</p>
 {% endif %}
 ```
 - create file `/homes/templates/homes/detail.html` with content:
 ```
-<h1>{{ question.question_text }}</h1>
-
-{% if error_message %}
-<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<form action="{% url 'homes:vote' question.id %}" method="post">
-    {% csrf_token %} {% for choice in question.choice_set.all %}
-    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br /> {% endfor %}
-    <input type="submit" value="Vote" />
-</form>
+<h1>{{ property.property_name }}</h1>
 ```
 - create file `/homes/templates/homes/results.html` with content:
 ```
-<h1>{{ question.question_text }}</h1>
-
-<ul>
-    {% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-    {% endfor %}
-</ul>
-
-<a href="{% url 'homes:detail' question.id %}">Vote again?</a>
+<h1>{{ property.property_name }}</h1>
 ```
 
 ## Look and feel
 - add file `homes/static/homes/style.css` with content:
 ```
 li a {
-  color: green;
-}
-
-body {
-  background: white url("images/python.gif") no-repeat right bottom;
+  color: red;
 }
 ```
-- add file `homes/static/homes/images/python.gif`
 - add `admin.site.site_header = 'HomePointr admin'` to `homes/admin.py`
 
 
