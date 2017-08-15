@@ -69,7 +69,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
 - `python manage.py makemigrations`
 - `python manage.py migrate`
 - `python manage.py createsuperuser` I used myprojectuser & password
-- `python manage.py runserver 0.0.0.0:8000`
+- `python manage.py runserver 0:8000`
 - [localhost:8000](http://localhost:8000/)
 - [localhost:8000/admin](http://localhost:8000/admin)
 
