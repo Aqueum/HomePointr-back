@@ -93,7 +93,7 @@ class Provider(models.Model):
         return self.provider_name
 
 
-class PropetyType(models.Model):
+class PropertyType(models.Model):
     ptype = models.CharField(max_length=31)
 
     def __str__(self):
@@ -116,7 +116,7 @@ class Support(models.Model):
 
 class Property(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
-    ptype = models.ForeignKey(PropetyType)
+    ptype = models.ForeignKey(PropertyType)
     name = models.CharField(max_length=255)
     address1 = models.CharField(max_length=255, default=name)
     address2 = models.CharField(max_length=255)

@@ -17,14 +17,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Council',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=127)),
             ],
         ),
         migrations.CreateModel(
             name='Photo',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('url', models.CharField(max_length=200)),
                 ('credit', models.CharField(max_length=200)),
                 ('description', models.CharField(max_length=800)),
@@ -33,9 +35,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Property',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('address1', models.CharField(default=models.CharField(max_length=255), max_length=255)),
+                ('address1', models.CharField(
+                    default=models.CharField(max_length=255), max_length=255)),
                 ('address2', models.CharField(max_length=255)),
                 ('address3', models.CharField(max_length=255)),
                 ('town', models.CharField(max_length=31)),
@@ -49,39 +53,45 @@ class Migration(migrations.Migration):
                 ('rent_pcm', models.DecimalField(decimal_places=2, max_digits=7)),
                 ('deposit', models.DecimalField(decimal_places=2, max_digits=7)),
                 ('units', models.IntegerField(default=1)),
-                ('council', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='homes.Council')),
+                ('council', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='homes.Council')),
             ],
         ),
         migrations.CreateModel(
-            name='PropetyType',
+            name='PropertyType',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('ptype', models.CharField(max_length=31)),
             ],
         ),
         migrations.CreateModel(
             name='Provider',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=127)),
             ],
         ),
         migrations.CreateModel(
             name='Support',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('support', models.CharField(max_length=31)),
             ],
         ),
         migrations.AddField(
             model_name='property',
             name='provider',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='homes.Provider'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='homes.Provider'),
         ),
         migrations.AddField(
             model_name='property',
             name='ptype',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='homes.PropetyType'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='homes.PropertyType'),
         ),
         migrations.AddField(
             model_name='property',
@@ -91,6 +101,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='photo',
             name='prop',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='homes.Property'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='homes.Property'),
         ),
     ]
