@@ -26,7 +26,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
 - enter:
     ```
     CREATE DATABASE homepointr;
-    CREATE USER Aqueum WITH PASSWORD '1P';
+    CREATE USER Aqueum WITH PASSWORD 'jEQuV6h2uwBMG237';
     ALTER ROLE Aqueum SET client_encoding TO 'utf8';
     ALTER ROLE Aqueum SET default_transaction_isolation TO 'read committed';
     ALTER ROLE Aqueum SET timezone TO 'UTC';
@@ -54,7 +54,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'homepointr',
             'USER': 'Aqueum',
-            'PASSWORD': '1P',
+            'PASSWORD': 'jEQuV6h2uwBMG237',
             'HOST': 'localhost',
             'PORT': '',
         }
@@ -68,7 +68,7 @@ the following was originally based on [how-to-use-postgresql-with-your-django-ap
 - `cd /vagrant/homepointr`
 - `python manage.py makemigrations`
 - `python manage.py migrate`
-- `python manage.py createsuperuser` I used Aqueum & 1P
+- `python manage.py createsuperuser` I used Aqueum & jEQuV6h2uwBMG237
 - `python manage.py runserver 0.0.0.0:8000`
 - [localhost:8000](http://localhost:8000/)
 - [localhost:8000/admin](http://localhost:8000/admin)
