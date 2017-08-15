@@ -2,28 +2,28 @@ from django.db import models
 
 
 class Provider(models.Model):
-    provider_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=127)
 
     def __str__(self):
         return self.provider_name
 
 
-class Council(models.Model):
-    council_name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.council_name
-
-
 class PropetyType(models.Model):
-    property_type = models.CharField(max_length=20)
+    ptype = models.CharField(max_length=31)
 
     def __str__(self):
         return self.property_type
 
 
+class Council(models.Model):
+    name = models.CharField(max_length=127)
+
+    def __str__(self):
+        return self.council_name
+
+
 class Support(models.Model):
-    property_type = models.CharField(max_length=20)
+    support = models.CharField(max_length=31)
 
     def __str__(self):
         return self.property_type
@@ -31,18 +31,28 @@ class Support(models.Model):
 
 class Property(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
-    property_type = models.ForeignKey(PropetyType)
-    property_name = models.CharField(max_length=200)
+    ptype = models.ForeignKey(PropetyType)
+    name = models.CharField(max_length=255)
+    address1 = models.CharField(max_length=255)
+    address2 = models.CharField(max_length=255)
+    address3 = models.CharField(max_length=255)
+    town = models.CharField(max_length=31)
+    region = models.CharField(max_length=31)
+    postcode = models.CharField(max_length=31)
+    lat = models.DecimalField(decimal_places=6)
+    lng = models.DecimalField(decimal_places=6)
+    council = models.ForeignKey(Council)
     bedrooms = models.IntegerField(default=1)
     beds = models.IntegerField(default=1)
     max_occupants = models.IntegerField(default=1)
-    rent_pcm = models.DecimalField(decimal_places=2, default=0.00)
-    deposit = models.DecimalField(decimal_places=2, default=0.00)
-    parking = models.BooleanField
-    shared = models.BooleanField
     support = models.ManyToManyField(Support)
     wheelchair_accessible = models.BooleanField
-    council = models.ForeignKey(Council)
+    parking = models.BooleanField
+    shared = models.BooleanField
+    rent_pcm = models.DecimalField(decimal_places=2, default=0.00)
+    deposit = models.DecimalField(decimal_places=2, default=0.00)
+    units = models.IntegerField(default=1)
+    next_available = models.DateField
 
     def __str__(self):
         return self.property_name
@@ -50,9 +60,9 @@ class Property(models.Model):
 
 class Photo(models.Model):
     prop = models.ForeignKey(Property, on_delete=models.CASCADE)
-    photo_url = models.CharField(max_length=200)
-    photo_credit = models.CharField(max_length=200)
-    photo_description = models.CharField(max_length=800)
+    url = models.CharField(max_length=200)
+    credit = models.CharField(max_length=200)
+    description = models.CharField(max_length=800)
 
     def __str__(self):
         return self.photo_description
