@@ -155,15 +155,6 @@ class Photo(models.Model):
 ```
 ## Activate models
 - add `'homes.apps.HomesConfig',` to top of `INSTALLED_APPS`. list in `homepointr/homepointr/settings.py`
-- ? check at the end to see if homepointr/homes/apps.py includes:
-    ```
-    from django.apps import AppConfig
-
-
-    class HomesConfig(AppConfig):
-        name = 'homes'
-
-    ```
 
 ## Add a view
 - edit `homes/views.py` to: 
