@@ -162,8 +162,8 @@ class Photo(models.Model):
 from django.contrib import admin
 
 from .models import Provider
-from .models import Council
 from .models import PropertyType
+from .models import Council
 from .models import Support
 from .models import Property
 from .models import Photo
