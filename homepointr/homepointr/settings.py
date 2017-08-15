@@ -25,7 +25,8 @@ SECRET_KEY = '13&*gt(g@4l_vl%nc%a_qz-2!#ttyavdqc9r8a6auadsjw6be@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '35.176.170.23',
+                 '192.168.1.65', '109.157.214.104', '127.0.0.1']
 
 
 # Application definition
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'homepointr.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'homepointr',
+        'USER': 'Aqueum',
+        'PASSWORD': '1P',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -103,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
 TIME_ZONE = 'UTC'
 
