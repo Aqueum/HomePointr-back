@@ -8,3 +8,5 @@ class BreadAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Bread, BreadAdmin)
+
+admin.site.site_header = 'HomePointr admin'`
