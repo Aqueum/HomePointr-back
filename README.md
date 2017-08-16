@@ -124,5 +124,14 @@ admin.site.register(Bread, BreadAdmin)
 
 ## Test App
 - `python manage.py runserver 0:8000`
-- [localhost:8000/homes](http://localhost:8000/homes)
+- [localhost:8000/admin](http://localhost:8000/admin)
+
+
+# Run from closed
+- navagate to `HomePointr-back` in terminal
+- `vagrant up`
+- `vagrant ssh`
+- `cd /vagrant/homepointr`
+- `source ENV/bin/activate`
+- `python manage.py runserver 0:8000`
 - [localhost:8000/admin](http://localhost:8000/admin)
