@@ -86,11 +86,71 @@ End of digitalocean setup tutorial, the following was originally based on [djang
 from django.db import models
 
 
-class Bread(models.Model):
+class Provider(models.Model):
     name = models.CharField(max_length=127)
 
     def __str__(self):
         return self.name
+
+
+class PropertyType(models.Model):
+    type = models.CharField(max_length=31)
+
+    def __str__(self):
+        return self.type
+
+
+class Council(models.Model):
+    name = models.CharField(max_length=127)
+
+    def __str__(self):
+        return self.name
+
+
+class Support(models.Model):
+    support = models.CharField(max_length=31)
+
+    def __str__(self):
+        return self.support
+
+
+class Property(models.Model):
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
+    ptype = models.ForeignKey(PropertyType)
+    name = models.CharField(max_length=255)
+    address1 = models.CharField(max_length=255)
+    address2 = models.CharField(max_length=255)
+    address3 = models.CharField(max_length=255)
+    town = models.CharField(max_length=31)
+    region = models.CharField(max_length=31)
+    postcode = models.CharField(max_length=31)
+    lat = models.DecimalField(max_digits=8, decimal_places=6)
+    lng = models.DecimalField(max_digits=9, decimal_places=6)
+    council = models.ForeignKey(Council)
+    bedrooms = models.IntegerField(default=1)
+    beds = models.IntegerField(default=1)
+    max_occupants = models.IntegerField(default=1)
+    support = models.ManyToManyField(Support)
+    wheelchair_accessible = models.BooleanField
+    parking = models.BooleanField
+    shared = models.BooleanField
+    rent_pcm = models.DecimalField(max_digits=7, decimal_places=2)
+    deposit = models.DecimalField(max_digits=7, decimal_places=2)
+    units = models.IntegerField(default=1)
+    next_available = models.DateField
+
+    def __str__(self):
+        return self.name
+
+
+class Photo(models.Model):
+    prop = models.ForeignKey(Property, on_delete=models.CASCADE)
+    url = models.CharField(max_length=200)
+    credit = models.CharField(max_length=200)
+    description = models.CharField(max_length=800)
+
+    def __str__(self):
+        return self.description
 
 ```
 ## Activate models
@@ -101,14 +161,41 @@ class Bread(models.Model):
 ```
 from django.contrib import admin
 
-from .models import Bread
+from .models import Property
+from .models import PropertyType
+from .models import Provider
+from .models import Council
+from .models import Support
 
 
-class BreadAdmin(admin.ModelAdmin):
+class PropertyAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Bread, BreadAdmin)
+class PropertyTypeAdmin(admin.ModelAdmin):
+    pass
+
+
+class ProviderAdmin(admin.ModelAdmin):
+    pass
+
+
+class CouncilAdmin(admin.ModelAdmin):
+    pass
+
+
+class SupportAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Property, PropertyAdmin)
+admin.site.register(PropertyType, PropertyTypeAdmin)
+admin.site.register(Provider, ProviderAdmin)
+admin.site.register(Council, CouncilAdmin)
+admin.site.register(Support, SupportAdmin)
+
+admin.site.site_header = 'HomePointr admin'
+
 ```
 
 ## Look and feel
