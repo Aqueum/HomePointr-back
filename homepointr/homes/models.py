@@ -9,10 +9,10 @@ class Provider(models.Model):
 
 
 class PropertyType(models.Model):
-    ptype = models.CharField(max_length=31)
+    type = models.CharField(max_length=31)
 
     def __str__(self):
-        return self.ptype
+        return self.type
 
 
 class Council(models.Model):
@@ -33,7 +33,7 @@ class Property(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     ptype = models.ForeignKey(PropertyType)
     name = models.CharField(max_length=255)
-    address1 = models.CharField(max_length=255, default=name)
+    address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255)
     address3 = models.CharField(max_length=255)
     town = models.CharField(max_length=31)

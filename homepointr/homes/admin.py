@@ -1,29 +1,36 @@
 from django.contrib import admin
 
-from .models import Provider
+from .models import Property
 from .models import PropertyType
+from .models import Provider
 from .models import Council
 from .models import Support
-from .models import Property
-from .models import Photo
 
 
-class PhotoInline(admin.TabularInline):
-    model = Photo
-    extra = 0
+class PropertyAdmin(admin.ModelAdmin):
+    pass
 
 
-class PropertyInline(admin.TabularInline):
-    model = Property
-    extra = 0
-    inlines = [PhotoInline]
+class PropertyTypeAdmin(admin.ModelAdmin):
+    pass
 
 
 class ProviderAdmin(admin.ModelAdmin):
     pass
-    # inlines = [PropertyInline]
-    # list_display = ('property_name')
-    # search_fields = ['property_name']
 
 
+class CouncilAdmin(admin.ModelAdmin):
+    pass
+
+
+class SupportAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Property, PropertyAdmin)
+admin.site.register(PropertyType, PropertyTypeAdmin)
 admin.site.register(Provider, ProviderAdmin)
+admin.site.register(Council, CouncilAdmin)
+admin.site.register(Support, SupportAdmin)
+
+admin.site.site_header = 'HomePointr admin'
