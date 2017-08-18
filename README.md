@@ -1,5 +1,6 @@
 # HomePointr Backend
 A Django back end app with PostgreSQL hosted on Ubuntu 16.04
+Martin Currie, [Aqueum](http://martin.aqueum.com) - 15/08/2017
 
 # Method
 ## Setup Ubuntu 16.04
@@ -222,3 +223,6 @@ admin.site.site_header = 'HomePointr admin'
 - `source ENV/bin/activate`
 - `python manage.py runserver 0:8000`
 - [localhost:8000/admin](http://localhost:8000/admin)
+
+# License
+All rights reserved, please contact martin@aqueum.com if you wish to license this software.
